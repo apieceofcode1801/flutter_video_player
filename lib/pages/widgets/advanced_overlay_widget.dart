@@ -24,7 +24,7 @@ class AdvancedOverlayWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Container(
-        color: Colors.black.withOpacity(0.1),
+        color: Colors.black.withOpacity(0.3),
         child: Stack(
           children: <Widget>[
             buildPlay(),
@@ -32,7 +32,10 @@ class AdvancedOverlayWidget extends StatelessWidget {
             Positioned(
               left: 8,
               bottom: 28,
-              child: Text(getPosition()),
+              child: Text(
+                getPosition(),
+                style: const TextStyle(color: Colors.white),
+              ),
             ),
             Positioned(
               bottom: 0,
@@ -68,11 +71,13 @@ class AdvancedOverlayWidget extends StatelessWidget {
                         child: Text('${speed}x'),
                       ))
                   .toList(),
-              child: Container(
-                color: Colors.white38,
+              child: Padding(
                 padding:
                     const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
-                child: Text('${controller.value.playbackSpeed}x'),
+                child: Text(
+                  '${controller.value.playbackSpeed}x',
+                  style: const TextStyle(color: Colors.white),
+                ),
               ),
             ),
             const SizedBox(width: 12),
@@ -98,7 +103,7 @@ class AdvancedOverlayWidget extends StatelessWidget {
           IconButton(
               onPressed: () async {
                 controller.seekTo(
-                    (await controller.position)! - const Duration(seconds: 2));
+                    (await controller.position)! - const Duration(seconds: 10));
               },
               icon: const Icon(
                 Icons.replay_10,
@@ -133,7 +138,7 @@ class AdvancedOverlayWidget extends StatelessWidget {
           IconButton(
               onPressed: () async {
                 controller.seekTo(
-                    (await controller.position)! + const Duration(seconds: 2));
+                    (await controller.position)! + const Duration(seconds: 10));
               },
               icon: const Icon(
                 Icons.forward_10,
