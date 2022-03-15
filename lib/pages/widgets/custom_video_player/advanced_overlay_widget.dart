@@ -1,21 +1,42 @@
 import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
 
-class AdvancedOverlayWidget extends StatelessWidget {
+import 'models/m3u8.dart';
+
+class AdvancedOverlayWidget extends StatefulWidget {
   final VideoPlayerController controller;
   final VoidCallback? onClickedFullScreen;
+  final Function(M3U8pass value)? onChangeQuality;
 
-  static const allSpeeds = <double>[0.25, 0.5, 1, 1.5, 2, 3, 5, 10];
+  final List<double> speeds;
+  final List<M3U8pass>? m3u8s;
+  final M3U8pass? currentM3u8;
+  final bool isFullscreen;
 
-  const AdvancedOverlayWidget({
-    Key? key,
-    required this.controller,
-    this.onClickedFullScreen,
-  }) : super(key: key);
+  const AdvancedOverlayWidget(
+      {Key? key,
+      required this.controller,
+      this.speeds = const [],
+      this.m3u8s,
+      this.currentM3u8,
+      this.onClickedFullScreen,
+      this.onChangeQuality,
+      required this.isFullscreen})
+      : super(key: key);
+
+  @override
+  State<AdvancedOverlayWidget> createState() => _AdvancedOverlayWidgetState();
+}
+
+class _AdvancedOverlayWidgetState extends State<AdvancedOverlayWidget> {
+  @override
+  void initState() {
+    super.initState();
+  }
 
   String getPosition() {
     final duration = Duration(
-        milliseconds: controller.value.position.inMilliseconds.round());
+        milliseconds: widget.controller.value.position.inMilliseconds.round());
 
     return [duration.inMinutes, duration.inSeconds]
         .map((seg) => seg.remainder(60).toString().padLeft(2, '0'))
@@ -51,7 +72,7 @@ class AdvancedOverlayWidget extends StatelessWidget {
         margin: const EdgeInsets.all(8).copyWith(right: 0),
         height: 16,
         child: VideoProgressIndicator(
-          controller,
+          widget.controller,
           allowScrubbing: true,
         ),
       );
@@ -61,11 +82,37 @@ class AdvancedOverlayWidget extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
+            widget.m3u8s != null && widget.m3u8s!.isNotEmpty
+                ? Row(children: [
+                    PopupMenuButton<M3U8pass>(
+                      initialValue: widget.m3u8s!.first,
+                      onSelected: (value) {
+                        if (widget.onChangeQuality != null) {
+                          widget.onChangeQuality!(value);
+                        }
+                      },
+                      itemBuilder: (context) => widget.m3u8s!
+                          .map<PopupMenuEntry<M3U8pass>>(
+                              (m3u8) => PopupMenuItem(
+                                    value: m3u8,
+                                    child: Text('${m3u8.dataQuality}'),
+                                  ))
+                          .toList(),
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(
+                            vertical: 12, horizontal: 16),
+                        child: Text(
+                            '${widget.currentM3u8?.dataQuality ?? widget.m3u8s!.first.dataQuality}',
+                            style: const TextStyle(color: Colors.white)),
+                      ),
+                    ),
+                    const SizedBox(width: 12),
+                  ])
+                : const SizedBox.shrink(),
             PopupMenuButton<double>(
-              initialValue: controller.value.playbackSpeed,
-              tooltip: 'Playback speed',
-              onSelected: controller.setPlaybackSpeed,
-              itemBuilder: (context) => allSpeeds
+              initialValue: widget.controller.value.playbackSpeed,
+              onSelected: widget.controller.setPlaybackSpeed,
+              itemBuilder: (context) => widget.speeds
                   .map<PopupMenuEntry<double>>((speed) => PopupMenuItem(
                         value: speed,
                         child: Text('${speed}x'),
@@ -75,19 +122,19 @@ class AdvancedOverlayWidget extends StatelessWidget {
                 padding:
                     const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
                 child: Text(
-                  '${controller.value.playbackSpeed}x',
+                  '${widget.controller.value.playbackSpeed}x',
                   style: const TextStyle(color: Colors.white),
                 ),
               ),
             ),
             const SizedBox(width: 12),
             GestureDetector(
-              child: const Icon(
-                Icons.fullscreen,
+              child: Icon(
+                widget.isFullscreen ? Icons.fullscreen_exit : Icons.fullscreen,
                 color: Colors.white,
                 size: 28,
               ),
-              onTap: onClickedFullScreen,
+              onTap: widget.onClickedFullScreen,
             ),
             const SizedBox(width: 8),
           ],
@@ -102,8 +149,8 @@ class AdvancedOverlayWidget extends StatelessWidget {
         children: [
           IconButton(
               onPressed: () async {
-                controller.seekTo(
-                    (await controller.position)! - const Duration(seconds: 10));
+                widget.controller.seekTo((await widget.controller.position)! -
+                    const Duration(seconds: 10));
               },
               icon: const Icon(
                 Icons.replay_10,
@@ -121,15 +168,17 @@ class AdvancedOverlayWidget extends StatelessWidget {
                 borderRadius: BorderRadius.all(Radius.circular(70)),
               ),
               child: Icon(
-                controller.value.isPlaying ? Icons.pause : Icons.play_arrow,
+                widget.controller.value.isPlaying
+                    ? Icons.pause
+                    : Icons.play_arrow,
                 color: Colors.white,
                 size: 70,
               ),
             ),
             onTap: () {
-              controller.value.isPlaying
-                  ? controller.pause()
-                  : controller.play();
+              widget.controller.value.isPlaying
+                  ? widget.controller.pause()
+                  : widget.controller.play();
             },
           ),
           const SizedBox(
@@ -137,8 +186,8 @@ class AdvancedOverlayWidget extends StatelessWidget {
           ),
           IconButton(
               onPressed: () async {
-                controller.seekTo(
-                    (await controller.position)! + const Duration(seconds: 10));
+                widget.controller.seekTo((await widget.controller.position)! +
+                    const Duration(seconds: 10));
               },
               icon: const Icon(
                 Icons.forward_10,
