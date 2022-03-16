@@ -69,7 +69,7 @@ class _AdvancedOverlayWidgetState extends State<AdvancedOverlayWidget> {
       );
 
   Widget buildIndicator() => Container(
-        margin: const EdgeInsets.all(8).copyWith(right: 0),
+        margin: const EdgeInsets.all(8),
         height: 16,
         child: VideoProgressIndicator(
           widget.controller,
@@ -85,7 +85,7 @@ class _AdvancedOverlayWidgetState extends State<AdvancedOverlayWidget> {
             widget.m3u8s != null && widget.m3u8s!.isNotEmpty
                 ? Row(children: [
                     PopupMenuButton<M3U8pass>(
-                      initialValue: widget.m3u8s!.first,
+                      initialValue: widget.currentM3u8,
                       onSelected: (value) {
                         if (widget.onChangeQuality != null) {
                           widget.onChangeQuality!(value);

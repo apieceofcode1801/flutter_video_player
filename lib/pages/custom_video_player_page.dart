@@ -15,37 +15,31 @@ const urlPortraitVideo =
     'https://assets.mixkit.co/videos/preview/mixkit-a-girl-blowing-a-bubble-gum-at-an-amusement-park-1226-large.mp4';
 
 class _CustomVideoPlayerPageState extends State<CustomVideoPlayerPage> {
+  bool _fullScreen = false;
   @override
   Widget build(BuildContext context) {
-    return OrientationBuilder(
-      builder: (context, orientation) {
-        debugPrint('$orientation');
-        final isPortrait = orientation == Orientation.portrait;
-        return SafeArea(
-            top: false,
-            child: Scaffold(
-                appBar: isPortrait
-                    ? AppBar(
-                        title: const Text('Custom video player'),
-                      )
-                    : null,
-                body: _buildContent(isPortrait: isPortrait)));
-      },
-    );
-  }
-
-  Widget _buildContent({required bool isPortrait}) {
-    const player = CustomVideoPlayer(
-      url: urlLandscapeVideo,
-    );
-    return Container(
-      alignment: Alignment.topCenter,
-      child: isPortrait
-          ? Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-              const SizedBox(height: 200, child: player),
-              _buildDescription(),
-            ])
-          : player,
+    return SafeArea(
+      top: false,
+      child: Scaffold(
+        appBar: _fullScreen
+            ? null
+            : AppBar(
+                title: const Text('Custom video player'),
+              ),
+        body: Column(
+          children: [
+            CustomVideoPlayer(
+              url: urlLandscapeVideo,
+              onFullScreen: (value) {
+                setState(() {
+                  _fullScreen = value;
+                });
+              },
+            ),
+            !_fullScreen ? _buildDescription() : Container(),
+          ],
+        ),
+      ),
     );
   }
 
@@ -62,7 +56,10 @@ class _CustomVideoPlayerPageState extends State<CustomVideoPlayerPage> {
               'Subtitle',
               style: TextStyle(fontSize: 16),
             ),
-            TextButton(onPressed: () {}, child: const Text('Click me'))
+            TextButton(
+              onPressed: () {},
+              child: const Text('Click me'),
+            )
           ],
         ),
       );
