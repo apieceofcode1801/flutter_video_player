@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:auto_orientation/auto_orientation.dart';
-import 'package:custom_video_player/pages/widgets/custom_video_player/utils/url_utils.dart';
+import 'package:custom_video_player/pages/widgets/custom_video_player/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
 
@@ -102,16 +102,16 @@ class _CustomVideoPlayerState extends State<CustomVideoPlayer> {
       });
       _controller?.pause();
       final seekTo = _controller?.value.position ?? const Duration(seconds: 0);
+      final speed = _controller?.value.playbackSpeed ?? 1;
       _controller =
           VideoPlayerController.network(url, formatHint: VideoFormat.hls)
             ..addListener(listener)
             ..setLooping(true)
-            ..initialize().then(
-              (_) {
-                _controller?.play();
-                _controller?.seekTo(seekTo);
-              },
-            );
+            ..initialize().then((_) async {
+              await _controller?.play();
+              await _controller?.seekTo(seekTo);
+              _controller?.setPlaybackSpeed(speed);
+            });
     }
   }
 
@@ -132,18 +132,26 @@ class _CustomVideoPlayerState extends State<CustomVideoPlayer> {
       child: Stack(
         fit: StackFit.expand,
         children: [
-          ClipRect(
-            child: Container(
-              width: double.infinity,
-              height: double.infinity,
-              color: Colors.black,
-              child: Center(
-                  child: AspectRatio(
-                aspectRatio: _controller!.value.aspectRatio,
-                child: VideoPlayer(_controller!),
-              )),
-            ),
+          Container(
+            color: Colors.black,
+            child: Center(
+                child: AspectRatio(
+              aspectRatio: _controller!.value.aspectRatio,
+              child: VideoPlayer(_controller!),
+            )),
           ),
+          // ClipRect(
+          //   child: Container(
+          //     width: double.infinity,
+          //     height: double.infinity,
+          //     color: Colors.black,
+          //     child: Center(
+          //         child: AspectRatio(
+          //       aspectRatio: _controller!.value.aspectRatio,
+          //       child: VideoPlayer(_controller!),
+          //     )),
+          //   ),
+          // ),
           _isShowControl
               ? Positioned.fill(
                   child: AdvancedOverlayWidget(
@@ -156,19 +164,31 @@ class _CustomVideoPlayerState extends State<CustomVideoPlayer> {
                     onChangeQuality: (value) {
                       resetControllerOnQualityChange(value);
                     },
+                    onPlayToggled: () {
+                      _clearShowControlTimer();
+                      _createShowControlTimer();
+                    },
                   ),
                 )
               : Container(),
         ],
       ),
     );
-    final screenSize = MediaQuery.of(context).size;
-    return AspectRatio(
-      aspectRatio: fullScreen
-          ? calculateAspectRatio(context, screenSize)
-          : widget.aspectRatio,
-      child: videoView,
-    );
+    return !fullScreen
+        ? AspectRatio(
+            aspectRatio: widget.aspectRatio,
+            child: videoView,
+          )
+        : Expanded(
+            child: LayoutBuilder(builder: ((context, constraints) {
+              final width = constraints.maxWidth;
+              final height = constraints.maxHeight;
+              return AspectRatio(
+                aspectRatio: width / height,
+                child: videoView,
+              );
+            })),
+          );
   }
 
   void _navigateLocally(context) async {
@@ -191,16 +211,20 @@ class _CustomVideoPlayerState extends State<CustomVideoPlayer> {
   void _handleShowControl() {
     _clearShowControlTimer();
     if (!_isShowControl) {
-      _controlShowTimer = Timer(const Duration(seconds: 3), () {
-        if (_isShowControl) {
-          setState(() {
-            _isShowControl = false;
-          });
-        }
-      });
+      _createShowControlTimer();
     }
     setState(() {
       _isShowControl = !_isShowControl;
+    });
+  }
+
+  _createShowControlTimer() {
+    _controlShowTimer = Timer(const Duration(seconds: 5), () {
+      if (_isShowControl) {
+        setState(() {
+          _isShowControl = false;
+        });
+      }
     });
   }
 
@@ -220,10 +244,4 @@ class _CustomVideoPlayerState extends State<CustomVideoPlayer> {
     _controller?.removeListener(listener);
     super.deactivate();
   }
-}
-
-double calculateAspectRatio(BuildContext context, Size screenSize) {
-  final width = screenSize.width;
-  final height = screenSize.height;
-  return width > height ? width / height : height / width;
 }

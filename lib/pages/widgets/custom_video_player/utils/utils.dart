@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
 
 import '../models/m3u8.dart';
@@ -62,4 +62,10 @@ Future<List<M3U8pass>> loadM3U8s(String video) async {
     },
   );
   return m3u8s;
+}
+
+double calculateAspectRatio(BuildContext context, Size screenSize) {
+  final width = screenSize.width;
+  final height = screenSize.height;
+  return width > height ? width / height : height / width;
 }

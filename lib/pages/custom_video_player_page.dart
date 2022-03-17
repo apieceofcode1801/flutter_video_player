@@ -19,28 +19,26 @@ class _CustomVideoPlayerPageState extends State<CustomVideoPlayerPage> {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-      top: false,
-      child: Scaffold(
-        appBar: _fullScreen
-            ? null
-            : AppBar(
-                title: const Text('Custom video player'),
-              ),
-        body: Column(
-          children: [
-            CustomVideoPlayer(
-              url: urlLandscapeVideo,
-              onFullScreen: (value) {
-                setState(() {
-                  _fullScreen = value;
-                });
-              },
+        child: Scaffold(
+      appBar: _fullScreen
+          ? null
+          : AppBar(
+              title: const Text('Custom video player'),
             ),
-            !_fullScreen ? _buildDescription() : Container(),
-          ],
-        ),
+      body: Column(
+        children: [
+          CustomVideoPlayer(
+            url: urlLandscapeVideo,
+            onFullScreen: (value) {
+              setState(() {
+                _fullScreen = value;
+              });
+            },
+          ),
+          !_fullScreen ? _buildDescription() : Container(),
+        ],
       ),
-    );
+    ));
   }
 
   Widget _buildDescription() => Padding(
