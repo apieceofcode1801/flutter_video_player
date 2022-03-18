@@ -1,4 +1,5 @@
 import 'package:custom_video_player/pages/widgets/custom_video_player/top_chip.dart';
+import 'package:custom_video_player/pages/widgets/custom_video_player/video_progress.dart';
 import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
 
@@ -77,10 +78,9 @@ class _AdvancedOverlayWidgetState extends State<AdvancedOverlayWidget> {
 
   Widget buildIndicator() => Container(
         margin: const EdgeInsets.all(8),
-        height: 16,
-        child: VideoProgressIndicator(
-          widget.controller,
-          allowScrubbing: true,
+        child: CustomVideoProgressIndicator(
+          controller: widget.controller,
+          height: 16,
         ),
       );
 

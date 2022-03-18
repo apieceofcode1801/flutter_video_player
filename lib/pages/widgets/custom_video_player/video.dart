@@ -132,26 +132,18 @@ class _CustomVideoPlayerState extends State<CustomVideoPlayer> {
       child: Stack(
         fit: StackFit.expand,
         children: [
-          Container(
-            color: Colors.black,
-            child: Center(
-                child: AspectRatio(
-              aspectRatio: _controller!.value.aspectRatio,
-              child: VideoPlayer(_controller!),
-            )),
+          ClipRect(
+            child: Container(
+              width: double.infinity,
+              height: double.infinity,
+              color: Colors.black,
+              child: Center(
+                  child: AspectRatio(
+                aspectRatio: _controller!.value.aspectRatio,
+                child: VideoPlayer(_controller!),
+              )),
+            ),
           ),
-          // ClipRect(
-          //   child: Container(
-          //     width: double.infinity,
-          //     height: double.infinity,
-          //     color: Colors.black,
-          //     child: Center(
-          //         child: AspectRatio(
-          //       aspectRatio: _controller!.value.aspectRatio,
-          //       child: VideoPlayer(_controller!),
-          //     )),
-          //   ),
-          // ),
           _isShowControl
               ? Positioned.fill(
                   child: AdvancedOverlayWidget(
@@ -174,7 +166,12 @@ class _CustomVideoPlayerState extends State<CustomVideoPlayer> {
         ],
       ),
     );
-    return !fullScreen
+    return AspectRatio(
+        aspectRatio: fullScreen
+            ? calculateAspectRatio(context, MediaQuery.of(context).size)
+            : widget.aspectRatio,
+        child: videoView);
+    !fullScreen
         ? AspectRatio(
             aspectRatio: widget.aspectRatio,
             child: videoView,
