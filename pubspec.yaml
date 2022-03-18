@@ -30,7 +30,8 @@ dependencies:
   cupertino_icons: ^1.0.2
   flutter:
     sdk: flutter
-  video_player: ^2.3.0
+  video_player: 
+    path: packages/video_player/video_player/
   auto_orientation: ^2.2.1
   http: ^0.13.4
 

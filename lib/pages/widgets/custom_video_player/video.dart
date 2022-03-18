@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:auto_orientation/auto_orientation.dart';
+import 'package:custom_video_player/pages/widgets/custom_video_player/models/quality.dart';
 import 'package:custom_video_player/pages/widgets/custom_video_player/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
@@ -33,7 +34,8 @@ class _CustomVideoPlayerState extends State<CustomVideoPlayer> {
   Timer? _controlShowTimer;
 
   List<M3U8pass> _m3u8s = [];
-  M3U8pass? _currentQuality;
+  List<Quality> _qualities = [];
+  Quality? _currentQuality;
 
   late VoidCallback listener;
 
@@ -81,44 +83,24 @@ class _CustomVideoPlayerState extends State<CustomVideoPlayer> {
   void initController() {
     final url = widget.url;
     VideoFormat? format = videoFormat(url);
-    if (_controller == null) {
-      _controller = VideoPlayerController.network(url, formatHint: format)
-        ..addListener(listener)
-        ..setLooping(true)
-        ..initialize().then(
-          (_) => _controller?.play(),
-        );
-      if (format == VideoFormat.hls) {
-        getM3U8(url);
-      }
+    if (format == VideoFormat.hls) {
+      _qualities = [
+        Quality(0, 'Auto'),
+        Quality(270000, '270kbps'),
+        Quality(560000, '560kbps'),
+        Quality(1070000, '1,070kbps'),
+        Quality(2770000, '2,770kbps'),
+        Quality(4070000, '4,070kbps'),
+      ];
+    } else {
+      _qualities = [];
     }
-  }
-
-  void resetControllerOnQualityChange(M3U8pass quality) async {
-    final url = quality.dataURL;
-    if (url != null) {
-      setState(() {
-        _currentQuality = quality;
-      });
-      _controller?.pause();
-      final seekTo = _controller?.value.position ?? const Duration(seconds: 0);
-      final speed = _controller?.value.playbackSpeed ?? 1;
-      _controller =
-          VideoPlayerController.network(url, formatHint: VideoFormat.hls)
-            ..addListener(listener)
-            ..setLooping(true)
-            ..initialize().then((_) async {
-              await _controller?.play();
-              await _controller?.seekTo(seekTo);
-              _controller?.setPlaybackSpeed(speed);
-            });
-    }
-  }
-
-  void getM3U8(String url) async {
-    _m3u8s.clear();
-    _m3u8s = await loadM3U8s(url);
-    setState(() {});
+    _controller ??= VideoPlayerController.network(url, formatHint: format)
+      ..addListener(listener)
+      ..setLooping(true)
+      ..initialize().then(
+        (_) => _controller?.play(),
+      );
   }
 
   @override
@@ -156,13 +138,16 @@ class _CustomVideoPlayerState extends State<CustomVideoPlayer> {
               ? Positioned.fill(
                   child: AdvancedOverlayWidget(
                     speeds: widget.speeds,
-                    m3u8s: _m3u8s,
-                    currentM3u8: _currentQuality,
+                    qualities: _qualities,
+                    currentQuality: _currentQuality,
                     isFullscreen: !isPortrait,
                     controller: _controller!,
                     onClickedFullScreen: toggleFullScreen,
                     onChangeQuality: (value) {
-                      resetControllerOnQualityChange(value);
+                      setState(() {
+                        _currentQuality = value;
+                      });
+                      _controller?.setBitrate(value.bitrate);
                     },
                     onPlayToggled: () {
                       _clearShowControlTimer();
