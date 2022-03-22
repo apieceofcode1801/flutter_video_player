@@ -25,18 +25,20 @@ class _CustomVideoPlayerPageState extends State<CustomVideoPlayerPage> {
           : AppBar(
               title: const Text('Custom video player'),
             ),
-      body: Column(
-        children: [
-          CustomVideoPlayer(
-            url: urlLandscapeVideo,
-            onFullScreen: (value) {
-              setState(() {
-                _fullScreen = value;
-              });
-            },
-          ),
-          !_fullScreen ? _buildDescription() : Container(),
-        ],
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            CustomVideoPlayer(
+              url: urlLandscapeVideo,
+              onFullScreen: (value) {
+                setState(() {
+                  _fullScreen = value;
+                });
+              },
+            ),
+            !_fullScreen ? _buildDescription() : Container(),
+          ],
+        ),
       ),
     ));
   }
