@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:ui' as ui;
 
 import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
@@ -64,8 +65,10 @@ Future<List<M3U8pass>> loadM3U8s(String video) async {
   return m3u8s;
 }
 
-double calculateAspectRatio(BuildContext context, Size screenSize) {
-  final width = screenSize.width;
-  final height = screenSize.height;
+double calculateFullScreenAspectRatio(BuildContext context) {
+  final size = MediaQueryData.fromWindow(ui.window).size;
+  final padding = MediaQueryData.fromWindow(ui.window).padding;
+  final width = size.width - padding.left - padding.right;
+  final height = size.height - padding.top - padding.bottom;
   return width > height ? width / height : height / width;
 }

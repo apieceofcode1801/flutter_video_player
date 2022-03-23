@@ -168,7 +168,7 @@ class _CustomVideoPlayerState extends State<CustomVideoPlayer> {
     );
     return AspectRatio(
         aspectRatio: fullScreen
-            ? calculateAspectRatio(context, MediaQuery.of(context).size)
+            ? calculateFullScreenAspectRatio(context)
             : widget.aspectRatio,
         child: videoView);
     !fullScreen
