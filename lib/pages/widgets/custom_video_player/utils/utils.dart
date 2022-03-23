@@ -32,13 +32,12 @@ Future<List<M3U8pass>> loadM3U8s(String video) async {
   );
 
   String? m3u8Content;
-  if (m3u8Content == null) {
-    http.Response response = await http.get(Uri.parse(video));
-    if (response.statusCode == 200) {
-      m3u8Content = utf8.decode(response.bodyBytes);
-    }
+  http.Response response = await http.get(Uri.parse(video));
+  if (response.statusCode == 200) {
+    m3u8Content = utf8.decode(response.bodyBytes);
   }
-  List<RegExpMatch> matches = regExp.allMatches(m3u8Content!).toList();
+  if (m3u8Content == null) return [];
+  List<RegExpMatch> matches = regExp.allMatches(m3u8Content).toList();
   debugPrint(
       "--- HLS Data ----\n$m3u8Content \ntotal length: ${m3u8s.length} \nfinish");
 
