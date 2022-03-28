@@ -1,27 +1,26 @@
+import 'package:custom_video_player/pages/widgets/custom_video_player/models/quality.dart';
 import 'package:custom_video_player/pages/widgets/custom_video_player/top_chip.dart';
 import 'package:custom_video_player/pages/widgets/custom_video_player/video_progress.dart';
 import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
 
-import 'models/m3u8.dart';
-
 class AdvancedOverlayWidget extends StatefulWidget {
   final VideoPlayerController controller;
   final VoidCallback onClickedFullScreen;
-  final Function(M3U8pass value) onChangeQuality;
+  final Function(Quality value) onChangeQuality;
   final VoidCallback onPlayToggled;
 
   final List<double> speeds;
-  final List<M3U8pass>? m3u8s;
-  final M3U8pass? currentM3u8;
+  final List<Quality>? qualities;
+  final Quality? currentQuality;
   final bool isFullscreen;
 
   const AdvancedOverlayWidget(
       {Key? key,
       required this.controller,
       this.speeds = const [],
-      this.m3u8s,
-      this.currentM3u8,
+      this.qualities,
+      this.currentQuality,
       required this.onClickedFullScreen,
       required this.onChangeQuality,
       required this.onPlayToggled,
@@ -33,7 +32,7 @@ class AdvancedOverlayWidget extends StatefulWidget {
 }
 
 class _AdvancedOverlayWidgetState extends State<AdvancedOverlayWidget> {
-  bool _showM3u8 = false;
+  bool _showQuality = false;
   bool _showSpeed = false;
   @override
   void initState() {
@@ -91,13 +90,13 @@ class _AdvancedOverlayWidgetState extends State<AdvancedOverlayWidget> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
-              widget.m3u8s != null && widget.m3u8s!.isNotEmpty
+              widget.qualities != null && widget.qualities!.isNotEmpty
                   ? topChip(
-                      Text(
-                          '${widget.currentM3u8?.dataQuality ?? widget.m3u8s!.first.dataQuality}'),
+                      Text(widget.currentQuality?.name ??
+                          widget.qualities!.first.name),
                       () {
                         setState(() {
-                          _showM3u8 = true;
+                          _showQuality = true;
                           _showSpeed = false;
                         });
                       },
@@ -110,7 +109,7 @@ class _AdvancedOverlayWidgetState extends State<AdvancedOverlayWidget> {
                       () {
                         setState(() {
                           _showSpeed = true;
-                          _showM3u8 = false;
+                          _showQuality = false;
                         });
                       },
                     )
@@ -191,18 +190,18 @@ class _AdvancedOverlayWidgetState extends State<AdvancedOverlayWidget> {
   }
 
   Widget buildM3u8list() {
-    return _showM3u8
+    return _showQuality
         ? Align(
             alignment: Alignment.topRight,
             child: Padding(
               padding: const EdgeInsets.only(top: 40.0, right: 55),
               child: SingleChildScrollView(
                 child: Column(
-                  children: widget.m3u8s!
+                  children: widget.qualities!
                       .map((e) => InkWell(
                             onTap: () {
                               setState(() {
-                                _showM3u8 = false;
+                                _showQuality = false;
                               });
                               widget.onChangeQuality(e);
                             },
@@ -212,7 +211,7 @@ class _AdvancedOverlayWidgetState extends State<AdvancedOverlayWidget> {
                                 child: Padding(
                                   padding: const EdgeInsets.all(8.0),
                                   child: Text(
-                                    "${e.dataQuality}",
+                                    e.name,
                                     style: const TextStyle(
                                       color: Colors.white,
                                     ),

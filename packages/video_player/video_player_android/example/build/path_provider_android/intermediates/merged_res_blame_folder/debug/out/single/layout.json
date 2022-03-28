@@ -1,0 +1,26 @@
+[
+    {
+        "merged": "/Users/trunghvbk/Code/invidial/git/apieceofcode1801/custom_video_player/packages/video_player/video_player_android/example/build/path_provider_android/intermediates/merged_res/debug/layout/notification_template_icon_group.xml",
+        "source": "/Users/trunghvbk/.gradle/caches/transforms-3/cdc8381483b8f93e69df15ad3eb1e86a/transformed/core-1.6.0/res/layout/notification_template_icon_group.xml"
+    },
+    {
+        "merged": "/Users/trunghvbk/Code/invidial/git/apieceofcode1801/custom_video_player/packages/video_player/video_player_android/example/build/path_provider_android/intermediates/merged_res/debug/layout/custom_dialog.xml",
+        "source": "/Users/trunghvbk/.gradle/caches/transforms-3/cdc8381483b8f93e69df15ad3eb1e86a/transformed/core-1.6.0/res/layout/custom_dialog.xml"
+    },
+    {
+        "merged": "/Users/trunghvbk/Code/invidial/git/apieceofcode1801/custom_video_player/packages/video_player/video_player_android/example/build/path_provider_android/intermediates/merged_res/debug/layout/notification_action.xml",
+        "source": "/Users/trunghvbk/.gradle/caches/transforms-3/cdc8381483b8f93e69df15ad3eb1e86a/transformed/core-1.6.0/res/layout/notification_action.xml"
+    },
+    {
+        "merged": "/Users/trunghvbk/Code/invidial/git/apieceofcode1801/custom_video_player/packages/video_player/video_player_android/example/build/path_provider_android/intermediates/merged_res/debug/layout/notification_template_part_time.xml",
+        "source": "/Users/trunghvbk/.gradle/caches/transforms-3/cdc8381483b8f93e69df15ad3eb1e86a/transformed/core-1.6.0/res/layout/notification_template_part_time.xml"
+    },
+    {
+        "merged": "/Users/trunghvbk/Code/invidial/git/apieceofcode1801/custom_video_player/packages/video_player/video_player_android/example/build/path_provider_android/intermediates/merged_res/debug/layout/notification_action_tombstone.xml",
+        "source": "/Users/trunghvbk/.gradle/caches/transforms-3/cdc8381483b8f93e69df15ad3eb1e86a/transformed/core-1.6.0/res/layout/notification_action_tombstone.xml"
+    },
+    {
+        "merged": "/Users/trunghvbk/Code/invidial/git/apieceofcode1801/custom_video_player/packages/video_player/video_player_android/example/build/path_provider_android/intermediates/merged_res/debug/layout/notification_template_part_chronometer.xml",
+        "source": "/Users/trunghvbk/.gradle/caches/transforms-3/cdc8381483b8f93e69df15ad3eb1e86a/transformed/core-1.6.0/res/layout/notification_template_part_chronometer.xml"
+    }
+]
