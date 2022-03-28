@@ -100,20 +100,21 @@ class _CustomVideoPlayerState extends State<CustomVideoPlayer> {
       setState(() {
         _currentQuality = quality;
       });
-      _controller?.pause();
       final seekTo = _controller?.value.position ?? const Duration(seconds: 0);
       final speed = _controller?.value.playbackSpeed ?? 1;
       final isPlaying = _controller?.value.isPlaying ?? false;
+      _controller?.pause();
+      _controller?.dispose();
       _controller =
           VideoPlayerController.network(url, formatHint: VideoFormat.hls)
             ..addListener(listener)
             ..setLooping(true)
             ..initialize().then((_) async {
-              await _controller?.seekTo(seekTo);
-              await _controller?.setPlaybackSpeed(speed);
               if (isPlaying) {
-                _controller?.play();
+                await _controller?.play();
               }
+              _controller?.setPlaybackSpeed(speed);
+              _controller?.seekTo(seekTo);
             });
     }
   }
