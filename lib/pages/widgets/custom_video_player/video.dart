@@ -163,6 +163,12 @@ class _CustomVideoPlayerState extends State<CustomVideoPlayer> {
                       _clearShowControlTimer();
                       _createShowControlTimer();
                     },
+                    startChangingProgress: () {
+                      _clearShowControlTimer();
+                    },
+                    endChangingProgress: () {
+                      _createShowControlTimer();
+                    },
                   ),
                 )
               : Container(),
