@@ -15,18 +15,23 @@ class CustomVideoProgressColors {
 }
 
 class CustomVideoProgressIndicator extends StatefulWidget {
-  const CustomVideoProgressIndicator({
-    Key? key,
-    required this.controller,
-    this.colors = const CustomVideoProgressColors(),
-    this.height = 16,
-  }) : super(key: key);
+  const CustomVideoProgressIndicator(
+      {Key? key,
+      required this.controller,
+      this.colors = const CustomVideoProgressColors(),
+      this.height = 16,
+      this.startChangingProgress,
+      this.endChangingProgress})
+      : super(key: key);
 
   final VideoPlayerController controller;
 
   final CustomVideoProgressColors colors;
 
   final double height;
+
+  final VoidCallback? startChangingProgress;
+  final VoidCallback? endChangingProgress;
 
   @override
   _CustomVideoProgressIndicatorState createState() =>
@@ -137,6 +142,9 @@ class _CustomVideoProgressIndicatorState
                       if (_controllerWasPlaying) {
                         controller.pause();
                       }
+                      if (widget.startChangingProgress != null) {
+                        widget.startChangingProgress!();
+                      }
                     },
                     onHorizontalDragUpdate: (DragUpdateDetails details) {
                       if (!controller.value.isInitialized) {
@@ -145,6 +153,9 @@ class _CustomVideoProgressIndicatorState
                       seekToRelativePosition(details.globalPosition);
                     },
                     onHorizontalDragEnd: (DragEndDetails details) {
+                      if (widget.endChangingProgress != null) {
+                        widget.endChangingProgress!();
+                      }
                       if (_controllerWasPlaying &&
                           controller.value.position !=
                               controller.value.duration) {

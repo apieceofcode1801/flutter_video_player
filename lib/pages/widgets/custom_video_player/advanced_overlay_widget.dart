@@ -15,6 +15,9 @@ class AdvancedOverlayWidget extends StatefulWidget {
   final Quality? currentQuality;
   final bool isFullscreen;
 
+  final VoidCallback? startChangingProgress;
+  final VoidCallback? endChangingProgress;
+
   const AdvancedOverlayWidget(
       {Key? key,
       required this.controller,
@@ -24,7 +27,9 @@ class AdvancedOverlayWidget extends StatefulWidget {
       required this.onClickedFullScreen,
       required this.onChangeQuality,
       required this.onPlayToggled,
-      required this.isFullscreen})
+      required this.isFullscreen,
+      this.startChangingProgress,
+      this.endChangingProgress})
       : super(key: key);
 
   @override
@@ -80,6 +85,8 @@ class _AdvancedOverlayWidgetState extends State<AdvancedOverlayWidget> {
         child: CustomVideoProgressIndicator(
           controller: widget.controller,
           height: 16,
+          startChangingProgress: widget.startChangingProgress,
+          endChangingProgress: widget.endChangingProgress,
         ),
       );
 
