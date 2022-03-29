@@ -227,37 +227,47 @@ packages:
   video_player:
     dependency: "direct main"
     description:
-      path: "plugins/packages/video_player/video_player"
-      relative: true
-    source: path
+      path: "packages/video_player/video_player"
+      ref: main
+      resolved-ref: "4eae1cb0e80660b2130d87cd12ef6e405a89053d"
+      url: "git@github.com:apieceofcode1801/plugins.git"
+    source: git
     version: "2.3.0"
   video_player_android:
     dependency: transitive
     description:
-      path: "plugins/packages/video_player/video_player_android"
-      relative: true
-    source: path
-    version: "2.3.1"
+      path: "packages/video_player/video_player_android"
+      ref: main
+      resolved-ref: "4eae1cb0e80660b2130d87cd12ef6e405a89053d"
+      url: "git@github.com:apieceofcode1801/plugins.git"
+    source: git
+    version: "2.3.2"
   video_player_avfoundation:
     dependency: transitive
     description:
-      path: "plugins/packages/video_player/video_player_avfoundation"
-      relative: true
-    source: path
+      path: "packages/video_player/video_player_avfoundation"
+      ref: main
+      resolved-ref: "4eae1cb0e80660b2130d87cd12ef6e405a89053d"
+      url: "git@github.com:apieceofcode1801/plugins.git"
+    source: git
     version: "2.3.1"
   video_player_platform_interface:
     dependency: transitive
     description:
-      path: "plugins/packages/video_player/video_player_platform_interface"
-      relative: true
-    source: path
-    version: "5.1.0"
+      path: "packages/video_player/video_player_platform_interface"
+      ref: main
+      resolved-ref: "4eae1cb0e80660b2130d87cd12ef6e405a89053d"
+      url: "git@github.com:apieceofcode1801/plugins.git"
+    source: git
+    version: "5.1.1"
   video_player_web:
     dependency: transitive
     description:
-      path: "plugins/packages/video_player/video_player_web"
-      relative: true
-    source: path
+      path: "packages/video_player/video_player_web"
+      ref: main
+      resolved-ref: "4eae1cb0e80660b2130d87cd12ef6e405a89053d"
+      url: "git@github.com:apieceofcode1801/plugins.git"
+    source: git
     version: "2.0.7"
 sdks:
   dart: ">=2.16.1 <3.0.0"

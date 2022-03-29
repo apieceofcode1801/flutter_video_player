@@ -31,7 +31,10 @@ dependencies:
   flutter:
     sdk: flutter
   video_player: 
-    path: plugins/packages/video_player/video_player/
+    git:
+      url: git@github.com:apieceofcode1801/plugins.git
+      ref: main
+      path: packages/video_player/video_player
   auto_orientation: ^2.2.1
   http: ^0.13.4
 
